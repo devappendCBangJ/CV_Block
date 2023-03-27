@@ -12,7 +12,7 @@ import cv2
 # ==============================================================
 parser = argparse.ArgumentParser(description='Object_Detection_PIL_Plot_BoundingBox')
 
-parser.add_argument('--base-path', default='/media/hi/SK Gold P31/GSC/Human', type=str, help='Plot할 데이터셋이 모여있는 폴더 경로 지정')
+parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/Merge_All', type=str, help='Plot할 데이터셋이 모여있는 폴더 경로 지정')
 parser.add_argument('--source-parent-pathes', default=['images'], type=str, nargs='*', help='image_path')
 parser.add_argument('--source-child-pathes', default=['train', 'val', 'test'], type=str, nargs='*', help='train_path')
 parser.add_argument('--image-folder', default='images', type=str, help='image_folder')
@@ -74,6 +74,9 @@ def show_bbox(base_path):
 
                         # 4] Bounding Box 그리기
                         image = cv2.rectangle(image, (int(x1), int(y1)), (int(x2), int(y2)), (255, 0, 0), 3)
+
+                        # 5] 텍스트 그리기
+                        image = cv2.putText(image, label, org = (int(x1), int(y1)), fontFace = cv2.FONT_HERSHEY_PLAIN, fontScale = 1, color = (255, 255, 255))
 
                 # --------------------------------------------------------------
                 # 3) Image 시각화
