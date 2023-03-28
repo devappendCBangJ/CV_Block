@@ -1,16 +1,16 @@
 # ==============================================================
 # 0. 라이브러리 불러오기
 # ==============================================================
-from PIL import Image, ImageDraw
 import os
 import argparse
+import random
 
 import cv2
 
 # ==============================================================
 # 0. 변수 정의
 # ==============================================================
-parser = argparse.ArgumentParser(description='Object_Detection_PIL_Plot_BoundingBox')
+parser = argparse.ArgumentParser(description='YOLOv5_OpenCV_Plot_CenterCoordinates_MultipleBoundingBox')
 
 parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/Merge_All', type=str, help='Plot할 데이터셋이 모여있는 폴더 경로 지정')
 parser.add_argument('--source-parent-pathes', default=['images'], type=str, nargs='*', help='image_path')
@@ -21,6 +21,8 @@ parser.add_argument('--before-file-extension', default='.jpg', type=str, help='b
 parser.add_argument('--after-file-extension', default='.txt', type=str, help='after_file_extension')
 
 args = parser.parse_args()
+
+unique_label = {}
 
 # ==============================================================
 # 1. Bounding Box 그리기
@@ -59,6 +61,13 @@ def show_bbox(base_path):
                         # 1] Label Split
                         label, x, y, w, h = line.split(' ')
 
+                        # 2] unique label : 서로 다른 색상 사용
+                        if label not in unique_label:
+                            temp_color = (random.randrange(0, 255, 50), random.randrange(0, 255, 50), random.randrange(0, 255, 50))
+                            while temp_color in unique_label.values():
+                                temp_color = (random.randrange(0, 255, 50), random.randrange(0, 255, 50), random.randrange(0, 255, 50))
+                            unique_label[label] = temp_color
+
                         # 2] Label 자료형 변환
                         x = float(x)
                         y = float(y)
@@ -73,10 +82,10 @@ def show_bbox(base_path):
                         y2 = (y + h / 2) * H
 
                         # 4] Bounding Box 그리기
-                        image = cv2.rectangle(image, (int(x1), int(y1)), (int(x2), int(y2)), (255, 0, 0), 3)
+                        image = cv2.rectangle(image, (int(x1), int(y1)), (int(x2), int(y2)), color=unique_label[label], thickness=3)
 
                         # 5] 텍스트 그리기
-                        image = cv2.putText(image, label, org = (int(x1), int(y1)), fontFace = cv2.FONT_HERSHEY_PLAIN, fontScale = 1, color = (255, 255, 255))
+                        image = cv2.putText(image, label, org = (int(x1), int(y1)), fontFace = cv2.FONT_HERSHEY_PLAIN, fontScale = 2, color = unique_label[label])
 
                 # --------------------------------------------------------------
                 # 3) Image 시각화
