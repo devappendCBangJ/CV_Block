@@ -244,7 +244,8 @@ def rm_txts(dataset_abs_path):
 # 1. Main문
 # ==============================================================
 def main():
-    print(args)
+    print(f'args : {args}')
+    print(f'error_txts : {error_txts_label_abs_path[0]}')
     # 1) 데이터셋 경로 불러오기
     dataset_abs_path = Path(args.dataset_path)
     if not dataset_abs_path.is_dir():
