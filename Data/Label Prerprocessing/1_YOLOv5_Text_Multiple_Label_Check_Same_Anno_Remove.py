@@ -12,7 +12,7 @@ import argparse
 # ==============================================================
 # 0. 변수 정의
 # ==============================================================
-parser = argparse.ArgumentParser(description='YOLOv5_Text_Multiple_Label_Change_For_Train')
+parser = argparse.ArgumentParser(description='YOLOv5_Text_Multiple_Label_Check_Same_Anno_Remove')
 
 parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/CrowdHuman/labels', type=str, help='변경할 라벨들이 모여있는 폴더 지정')
 parser.add_argument('--before-label', default="all", type=str, help='변경 이전 라벨 지정')
@@ -46,7 +46,7 @@ def revise_label(labels_path, before_label):
                 # (3) 모든 경우 label 확인
                 print(f'labels_path : {label_path} | label : {label}')
                 """
-            # (4) 중복 label 확인
+            # (4) 중복 label+bbox 확인
             if len(set(lines)) != len(lines):
                 print(f"lines : {len(lines)}")
                 print(f"set(lines) : {len(set(lines))}")
