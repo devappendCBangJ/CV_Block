@@ -12,7 +12,7 @@ import argparse
 # ==============================================================
 # 0. 변수 정의
 # ==============================================================
-parser = argparse.ArgumentParser(description='YOLOv5_Text_Multiple_Label_Check_Same_Anno_Remove')
+parser = argparse.ArgumentParser(description='YOLOv5_Text_Multiple_Label_Check_Same_Anno_Check')
 
 parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/CrowdHuman/labels', type=str, help='변경할 라벨들이 모여있는 폴더 지정')
 parser.add_argument('--before-label', default="all", type=str, help='변경 이전 라벨 지정')

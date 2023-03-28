@@ -52,7 +52,7 @@ def revise_label(labels_path, before_label, after_label):
                 print(f"lines : {len(lines)}")
                 print(f"set(lines) : {len(set(lines))}")
 
-            # 4) 중복 label+bbox 확인
+            # 4) 중복 label+bbox 제거
             lines = list(set(lines))
 
         with open(label_path, 'w') as f:
