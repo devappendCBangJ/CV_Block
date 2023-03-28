@@ -37,6 +37,9 @@ parser.add_argument('--skip-download', action='store_true', help='Download the d
 
 args = parser.parse_args()
 
+images_abs_path = []
+error_txts_label_abs_path = ['| filename | cls | x | y | img_w | img_h |']
+
 # --------------------------------------------------------------
 # 1. Main문
     # 2) 데이터셋 다운로드 + 폴더 합치기
@@ -141,7 +144,7 @@ def image_shape(ID, image_abs_path):
 
 # --------------------------------------------------------------
 # 1. Main문
-    # 4)
+    # 4) annotation txt 파일 생성 for YOLOv5
         # (2) annotation 파일 열기
             # 4] txt 파일 생성 + 쓰기
                 # [1] gtboxes 순회
@@ -149,12 +152,17 @@ def image_shape(ID, image_abs_path):
                         # [[1]] hbox 좌표 쓰기 in txt
                         # [[2]] fbox 좌표 쓰기 in txt
 # --------------------------------------------------------------
-def txt_line(cls, bbox, img_w, img_h):
+def txt_line(txt_abs_path, cls, bbox, img_w, img_h):
     # 1. bbox 좌표 불러오기
     x, y, w, h = bbox
-    # 2. x, y, w, h 추출 : x, y의 좌표가 -인 경우 0으로 바꿔줌 / w, h좌표가 이미지 실제 w, h보다 큰 경우 이미지 최대 픽셀로 바꿔줌
+    # 2. x, y, w, h 추출 : x, y의 좌표가 이미지 최소 좌표보다 작은 경우, 0으로 바꿔줌 / x, y 좌표가 실제 w, h 좌표보다 큰 경우, 제거 / w, h좌표가 이미지 실제 w, h보다 큰 경우 이미지 최대 픽셀로 바꿔줌
     x = max(int(x), 0)
     y = max(int(y), 0)
+    if x >= img_w or y > img_h:
+        print(f'{txt_abs_path} {cls} {x} {y} {img_w} {img_h}')
+        # 1) 이미지 해상도 이상의 bbox를 가진 이미지 경로 + 라벨 저장 in [error_train.txt or error_val.txt]
+        error_txts_label_abs_path.append(f'{txt_abs_path} {cls} {x} {y} {img_w} {img_h}')
+        return None
     w = min(int(w), img_w - x)
     h = min(int(h), img_h - y)
     # 3. cx, cy, nw, nh 추출 : 정수 좌표 -> 비율 좌표 변환
@@ -162,6 +170,7 @@ def txt_line(cls, bbox, img_w, img_h):
     cy = (y + h / 2.) / img_h
     nw = float(w) / img_w
     nh = float(h) / img_h
+    images_abs_path.append('txt_abs_path')
     # 4. class, cx, cy, nw, nh 반환
     return '%d %.6f %.6f %.6f %.6f\n' % (cls, cx, cy, nw, nh)
 
@@ -173,7 +182,6 @@ def make_annotation_txt(train_val_dir='val', annotation_filename='annotation_val
     # (1) labels/val or labels/train 폴더 생성
     assert dataset_abs_path is not None
     dataset_abs_path.mkdir(exist_ok=True)
-    images_abs_path = []
     make_dir_ignore(dataset_abs_path / "labels" / train_val_dir)
 
     # (2) annotation 파일 열기
@@ -199,21 +207,25 @@ def make_annotation_txt(train_val_dir='val', annotation_filename='annotation_val
                     assert anno_obj['tag'] == 'person'
                     # [[1]] 얼굴 좌표(head box) 쓰기 in txt
                     if 'hbox' in anno_obj.keys():  # head
-                        line = txt_line(1, anno_obj['hbox'], img_w, img_h)
+                        line = txt_line(txt_abs_path, 1, anno_obj['hbox'], img_w, img_h)
                         if line:
                             txt_file.write(line)
                     # [[2]] 전체 몸(full box) 좌표 쓰기 in txt
                     if 'fbox' in anno_obj.keys():  # full body
-                        line = txt_line(0, anno_obj['fbox'], img_w, img_h)
+                        line = txt_line(txt_abs_path, 0, anno_obj['fbox'], img_w, img_h)
                         if line:
                             txt_file.write(line)
             # 5] 분류 완료한 이미지 경로 저장 in [train.txt or val.txt]
             images_abs_path.append('%s/%s.jpg' % (dataset_abs_path / Path("images") / Path(train_val_dir), ID))
-    # write the 'data/crowdhuman/train.txt' or 'data/crowdhuman/test.txt'
-    set_txt_abs_path = dataset_abs_path / ('%s.txt' % train_val_dir)
-    with open(set_txt_abs_path.as_posix(), 'w') as set_txt:
+    set_txt_save_abs_path = dataset_abs_path / ('%s.txt' % train_val_dir)
+    with open(set_txt_save_abs_path.as_posix(), 'w') as set_txt:
         for image_abs_path in images_abs_path:
             set_txt.write('%s\n' % image_abs_path)
+    # 6] 이미지 해상도 이상의 bbox를 가진 이미지 경로 + 라벨 저장 in [error_train.txt or error_val.txt]
+    error_txt_save_abs_path = dataset_abs_path / ('error_%s.txt' % train_val_dir)
+    with open(error_txt_save_abs_path.as_posix(), 'w') as error_txt:
+        for error_txt_abs_path in error_txts_label_abs_path:
+            error_txt.write('%s\n' % error_txt_abs_path)
 
 # --------------------------------------------------------------
 # 1. Main문
