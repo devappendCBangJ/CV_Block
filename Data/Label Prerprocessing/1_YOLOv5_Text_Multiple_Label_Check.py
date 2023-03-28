@@ -32,9 +32,10 @@ def revise_label(labels_path, before_label):
             # 2) label 한줄씩 불러오기
             lines = f.readlines()
 
-            # 3) label, bbox 값 확인
-            for line in lines:
+            # 3) label 값 확인
+            for idx, line in enumerate(lines):
                 label, bbox = line.split(' ', maxsplit=1)
+
                 # (1) Unique label 저장
                 if label not in unique_label:
                     unique_label.append(label)
@@ -42,9 +43,13 @@ def revise_label(labels_path, before_label):
                 if before_label != "all" and label == before_label:
                     print(f'labels_path : {label_path} | label : {label}')
                 """
-                # (3) 모든 경우 확인
+                # (3) 모든 경우 label 확인
                 print(f'labels_path : {label_path} | label : {label}')
                 """
+            # (4) 중복 label 확인
+            if len(set(lines)) != len(lines):
+                print(f"lines : {len(lines)}")
+                print(f"set(lines) : {len(set(lines))}")
 
     print(f'unique_label : {unique_label}')
 

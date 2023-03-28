@@ -155,23 +155,26 @@ def image_shape(ID, image_abs_path):
 def txt_line(txt_abs_path, cls, bbox, img_w, img_h):
     # 1. bbox 좌표 불러오기
     x, y, w, h = bbox
-    # 2. x, y, w, h 추출 : x, y의 좌표가 이미지 최소 좌표보다 작은 경우, 0으로 바꿔줌 / x, y 좌표가 실제 w, h 좌표보다 큰 경우, 제거 / w, h좌표가 이미지 실제 w, h보다 큰 경우 이미지 최대 픽셀로 바꿔줌
+    # 2. x, y, w, h 추출
+        # 1) x, y의 좌표가 이미지 최소 좌표보다 작은 경우, 0으로 바꿔줌
+        # 2) x, y 좌표가 실제 w, h 좌표보다 큰 경우, 제거
+        # 3) w, h좌표가 이미지 실제 w, h보다 큰 경우 이미지 최대 픽셀로 바꿔줌
     x = max(int(x), 0)
     y = max(int(y), 0)
+    # 3. 이미지 해상도 이상의 bbox를 가진 이미지 경로 + 라벨 저장 in [error_train.txt or error_val.txt]
     if x >= img_w or y > img_h:
         print(f'{txt_abs_path} {cls} {x} {y} {img_w} {img_h}')
-        # 1) 이미지 해상도 이상의 bbox를 가진 이미지 경로 + 라벨 저장 in [error_train.txt or error_val.txt]
         error_txts_label_abs_path.append(f'{txt_abs_path} {cls} {x} {y} {img_w} {img_h}')
         return None
     w = min(int(w), img_w - x)
     h = min(int(h), img_h - y)
-    # 3. cx, cy, nw, nh 추출 : 정수 좌표 -> 비율 좌표 변환
+    # 4. cx, cy, nw, nh 추출 : 정수 좌표 -> 비율 좌표 변환
     cx = (x + w / 2.) / img_w
     cy = (y + h / 2.) / img_h
     nw = float(w) / img_w
     nh = float(h) / img_h
     images_abs_path.append('txt_abs_path')
-    # 4. class, cx, cy, nw, nh 반환
+    # 5. class, cx, cy, nw, nh 반환
     return '%d %.6f %.6f %.6f %.6f\n' % (cls, cx, cy, nw, nh)
 
 # --------------------------------------------------------------

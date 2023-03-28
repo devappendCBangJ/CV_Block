@@ -47,6 +47,14 @@ def revise_label(labels_path, before_label, after_label):
                 print(f'labels_path : {label_path} | label : {label}')
                 """
 
+            # (4) 중복 label 확인
+            if len(set(lines)) != len(lines):
+                print(f"lines : {len(lines)}")
+                print(f"set(lines) : {len(set(lines))}")
+
+            # 4) 중복 label 제거
+            lines = list(set(lines))
+
         with open(label_path, 'w') as f:
             # 3) label 변환
             for line in lines:
