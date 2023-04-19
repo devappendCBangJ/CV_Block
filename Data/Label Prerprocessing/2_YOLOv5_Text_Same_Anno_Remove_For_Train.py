@@ -14,7 +14,7 @@ import argparse
 # ==============================================================
 parser = argparse.ArgumentParser(description='YOLOv5_Text_Same_Anno_Remove_For_Train')
 
-parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/Crowdman/labels', type=str, help='변경할 라벨들이 모여있는 폴더 지정')
+parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/CrowdHuman/labels_old', type=str, help='변경할 라벨들이 모여있는 폴더 지정')
 parser.add_argument('--before-label', default="all", type=str, help='변경 이전 라벨 지정')
 parser.add_argument('--after-label', default="2", type=str, help='변경 이후 라벨 지정')
 
@@ -53,4 +53,4 @@ def remove_same_anno(labels_path):
 # ==============================================================
 for idx, f_path in enumerate(['train/', 'val/', 'test/']):
     print(f'f_path : {f_path}')
-    remove_same_anno(f'{args.base_path}/{f_path}', before_label = args.before_label, after_label = args.after_label)
+    remove_same_anno(f'{args.base_path}/{f_path}')

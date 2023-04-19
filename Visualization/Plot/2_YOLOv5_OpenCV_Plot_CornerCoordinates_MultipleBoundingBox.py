@@ -67,10 +67,10 @@ def show_bbox(base_path):
 
                         # 3] Bounding Box 좌표 계산
                         H, W, C = image.shape
-                        x1 = (x - w / 2) * W
-                        y1 = (y - h / 2) * H
-                        x2 = (x + w / 2) * W
-                        y2 = (y + h / 2) * H
+                        x1 = (x) * W
+                        y1 = (y) * H
+                        x2 = (x + w) * W
+                        y2 = (y + h) * H
 
                         # 4] Bounding Box 그리기
                         image = cv2.rectangle(image, (int(x1), int(y1)), (int(x2), int(y2)), (255, 0, 0), 3)

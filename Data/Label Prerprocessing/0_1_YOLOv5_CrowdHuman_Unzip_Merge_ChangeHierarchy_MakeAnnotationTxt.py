@@ -162,7 +162,7 @@ def txt_line(txt_abs_path, cls, bbox, img_w, img_h):
     x = max(int(x), 0)
     y = max(int(y), 0)
     # 3. 이미지 해상도 이상의 bbox를 가진 이미지 경로 + 라벨 저장 in [error_train.txt or error_val.txt]
-    if x >= img_w or y > img_h:
+    if x >= img_w or y >= img_h:
         print(f'{txt_abs_path} {cls} {x} {y} {img_w} {img_h}')
         error_txts_label_abs_path.append(f'{txt_abs_path} {cls} {x} {y} {img_w} {img_h}')
         return None
@@ -173,7 +173,6 @@ def txt_line(txt_abs_path, cls, bbox, img_w, img_h):
     cy = (y + h / 2.) / img_h
     nw = float(w) / img_w
     nh = float(h) / img_h
-    images_abs_path.append('txt_abs_path')
     # 5. class, cx, cy, nw, nh 반환
     return '%d %.6f %.6f %.6f %.6f\n' % (cls, cx, cy, nw, nh)
 
