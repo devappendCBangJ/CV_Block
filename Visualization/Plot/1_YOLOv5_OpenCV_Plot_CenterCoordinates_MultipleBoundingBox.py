@@ -12,13 +12,13 @@ import cv2
 # ==============================================================
 parser = argparse.ArgumentParser(description='YOLOv5_OpenCV_Plot_CenterCoordinates_MultipleBoundingBox')
 
-parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/Merge_All', type=str, help='Plot할 데이터셋이 모여있는 폴더 경로 지정')
-parser.add_argument('--source-parent-pathes', default=['images'], type=str, nargs='*', help='image_path')
-parser.add_argument('--source-child-pathes', default=['train', 'val', 'test'], type=str, nargs='*', help='train_path')
-parser.add_argument('--image-folder', default='images', type=str, help='image_folder')
-parser.add_argument('--label-folder', default='labels', type=str, help='label_folder')
-parser.add_argument('--before-file-extension', default='.jpg', type=str, help='before_file_extension')
-parser.add_argument('--after-file-extension', default='.txt', type=str, help='after_file_extension')
+parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/COCO/annotations', type=str, help='Plot할 데이터셋이 모여있는 grandmother 폴더 경로 지정')
+parser.add_argument('--source-parent-pathes', default=['images'], type=str, nargs='*', help='Plot할 데이터셋의 이미지가 모여있는 mother 폴더 지정')
+parser.add_argument('--source-child-pathes', default=['train', 'val', 'test'], type=str, nargs='*', help='Plot할 데이터셋의 이미지가 모여있는 child 폴더 지정')
+parser.add_argument('--image-folder', default='images', type=str, help='base_path/source_parent_pathes/source_child_pathes에서 이미지가 모여있는 source_parent_pathes 폴더명')
+parser.add_argument('--label-folder', default='labels', type=str, help='base_path/source_parent_pathes/source_child_pathes에서 라벨이 모여있는 source_parent_pathes 폴더명')
+parser.add_argument('--before-file-extension', default='.jpg', type=str, help='base_path/image_folder/source_child_pathes 안에 들어있는 이미지 파일 확장자')
+parser.add_argument('--after-file-extension', default='.txt', type=str, help='base_path/label_folder/source_child_pathes 에서 오픈할 텍스트 파일 확장자')
 
 args = parser.parse_args()
 
@@ -88,7 +88,7 @@ def show_bbox(base_path):
                         image = cv2.putText(image, label, org = (int(x1), int(y1)), fontFace = cv2.FONT_HERSHEY_PLAIN, fontScale = 2, color = unique_label[label])
 
                 # --------------------------------------------------------------
-                # 3) Image 시각화
+                # 4) Image 시각화
                 # --------------------------------------------------------------
                 cv2.imshow(f'{image_filename}', image)
                 cv2.waitKey(0)
