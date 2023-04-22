@@ -40,12 +40,12 @@ def show_bbox(base_path):
     # --------------------------------------------------------------
     for image_path in args.source_parent_pathes:
         for train_path in args.source_child_pathes:
-            image_filenames = get_filenames(f'{args.base_path}/{image_path}/{train_path}')
+            image_filenames = get_filenames(f'{base_path}/{image_path}/{train_path}')
             for image_filename in image_filenames:
                 label_filename = image_filename.replace(args.before_file_extension, args.after_file_extension)
 
-                image_path = f'{args.base_path}/{args.image_folder}/{train_path}/{image_filename}'
-                label_path = f'{args.base_path}/{args.label_folder}/{train_path}/{label_filename}'
+                image_path = f'{base_path}/{args.image_folder}/{train_path}/{image_filename}'
+                label_path = f'{base_path}/{args.label_folder}/{train_path}/{label_filename}'
 
                 # --------------------------------------------------------------
                 # 2) Image 불러오기 + Bounding Box 그리기 준비
