@@ -9,7 +9,7 @@ import argparse
 # ==============================================================
 parser = argparse.ArgumentParser(description='3_Front_Similar_Name_Image_Remove')
 
-parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/GolfBall/Golfball_Near_New_Test', type=str, help='데이터셋이 모여있는 grandmother 폴더 경로 지정')
+parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/GolfBall/Golfball_Near_New', type=str, help='데이터셋이 모여있는 grandmother 폴더 경로 지정')
 parser.add_argument('--filename-split-criterions', default=['_jpeg', '_JPEG', '_png', '_jpg'], type=str, nargs='*', help='이미지명 Split 기준')
 
 parser.add_argument('--source-parent-pathes', default=['images'], type=str, nargs='*', help='데이터셋의 이미지가 모여있는 mother 폴더 지정')
@@ -22,73 +22,106 @@ parser.add_argument('--after-file-extension', default='.txt', type=str, help='ba
 
 args = parser.parse_args()
 
-dup_images_idx = {}
-now_image_filename = None
-next_image_filename = None
-
 def get_filenames(folder_path):
     filenames = os.listdir(folder_path)
     return filenames
 
-def Remove_Image(base_path):
-    # --------------------------------------------------------------
-    # 0) 변수 정의
-    # --------------------------------------------------------------
-    global dup_images_idx
-
+def Remove_Image():
     # --------------------------------------------------------------
     # 1) Image File list 불러오기
     # --------------------------------------------------------------
     for image_path in args.source_parent_pathes:
         for train_path in args.source_child_pathes:
-            image_filenames = get_filenames(f'{base_path}/{image_path}/{train_path}')
+            target_images = dict()
+            splited_image_filenames = []
+
+            image_filenames = get_filenames(f'{args.base_path}/{image_path}/{train_path}')
             image_filenames.sort()
+
+            # --------------------------------------------------------------
+            # (1) Split 기준에 부합하는 Image File의 앞부분만 저장 + Sort (_jpg, _png 등이 동시에 존재하는 경우 있으므로, 동일한 파일을 중복해서 list에 넣는 것을 방지하기 위해 break)
+            # --------------------------------------------------------------
+            for i, image_filename in enumerate(image_filenames):
+                for filename_split_criterion in args.filename_split_criterions:
+                    image_split_idx = image_filename.find(filename_split_criterion)
+                    if image_split_idx != -1:
+                        splited_image_filenames.append([i, image_filename[0:image_split_idx]])
+                        break
+
             """
             print("image_filenames : ", image_filenames)
             """
 
+            print(len(image_filenames), len(splited_image_filenames))
+
             # --------------------------------------------------------------
-            # (1) 이미지 파일 중에서, Split 기준에 부합하는 string을 포함한 경우만 진행
+            # (2) Splited Image File 순회하면서, 다음 파일명과 같으면 사진 용량 저장, 다음 파일명과 다르면 용량 최대인 사진만 남기고 중복 파일 삭제 / 마지막 순회인 경우 추가적으로, 용량 최대인 사진만 남기고 중복 파일 삭제
             # --------------------------------------------------------------
-            for filename_split_criterion in args.filename_split_criterions:
-                dup_images_idx = {}
-                for idx in range(len(image_filenames) - 1):
-                    if image_filenames[idx].find(filename_split_criterion) != -1:
-                        # 1] 모든 경우 : 현재 & 다음 파일명 추출
-                        now_image_filename, next_image_filename = image_filenames[idx], image_filenames[idx + 1]
-                        print('ㅋ', now_image_filename, next_image_filename)
-                        # 2] 처음 idx인 경우 : 현재 이미지 경로 + 용량 추출 -> list에 무조건 현재 이미지 index + 파일 용량 저장
-                        if idx == 0:
-                            now_image_path = f'{base_path}/{args.image_folder}/{train_path}/{now_image_filename}'
-                            now_image_filesize = os.path.getsize(now_image_path)
-                            dup_images_idx[idx] = now_image_filesize
-                        # 3] 모든 경우 : 다음 이미지 경로 + 용량 추출
-                        next_image_path = f'{base_path}/{args.image_folder}/{train_path}/{next_image_filename}'
+            for i in range(len(splited_image_filenames)-1):
+                # --------------------------------------------------------------
+                # 1] Split된 현재 이미지명 == Split된 다음 이미지명인 경우 : 현재, 다음 파일 용량 저장
+                # --------------------------------------------------------------
+                if splited_image_filenames[i][1] == splited_image_filenames[i+1][1]:
+                    # [1] buffer 비어있는 경우 : 현재, 다음 파일 용량 저장
+                    if len(target_images) == 0:
+                        now_image_idx, next_image_idx = splited_image_filenames[i][0], splited_image_filenames[i+1][0]
+                        now_image_filename, next_image_filename = image_filenames[now_image_idx], image_filenames[next_image_idx]
+                        now_image_path, next_image_path = f'{args.base_path}/{args.image_folder}/{train_path}/{now_image_filename}', f'{args.base_path}/{args.image_folder}/{train_path}/{next_image_filename}'
+                        now_image_filesize, next_image_filesize = os.path.getsize(now_image_path), os.path.getsize(next_image_path)
+                        target_images[splited_image_filenames[i][0]] = now_image_filesize
+                        target_images[splited_image_filenames[i+1][0]] = next_image_filesize
+                    # [2] buffer 1개 존재하는 경우 : 오류
+                    elif len(target_images) == 1:
+                        raise Exception("target_images 내에 원소가 1개만 존재합니다!")
+                    # [3] buffer 2개 이상 존재하는 경우 : 다음 파일 용량 저장
+                    else:
+                        next_image_idx = splited_image_filenames[i+1][0]
+                        next_image_filename = image_filenames[next_image_idx]
+                        next_image_path = f'{args.base_path}/{args.image_folder}/{train_path}/{next_image_filename}'
                         next_image_filesize = os.path.getsize(next_image_path)
+                        target_images[splited_image_filenames[i+1][0]] = next_image_filesize
+                # --------------------------------------------------------------
+                # 2] Split된 현재 이미지명 != Split된 다음 이미지명인 경우 : 파일 용량 최대값인 파일 빼고, 중복되는 파일 삭제
+                # --------------------------------------------------------------
+                else:
+                    # [1] buffer 비어있는 경우 : pass
+                    if len(target_images) == 0:
+                        pass
+                    # [2] buffer 1개 존재하는 경우 : 오류
+                    elif len(target_images) == 1:
+                        raise Exception("target_images 내에 원소가 1개만 존재합니다!")
+                    # [3] buffer 2개 이상 존재하는 경우 : 파일 용량 최대값인 파일 빼고, 중복되는 파일 삭제
+                    else:
+                        target_images.pop(max(target_images, key=target_images.get))
+                        for remove_image_idx in target_images.keys():
+                            print(remove_image_idx)
+                            print(len(image_filenames))
+                            remove_image_path = f'{args.base_path}/{args.image_folder}/{train_path}/{image_filenames[remove_image_idx]}'
+                            remove_label_path = f'{args.base_path}/{args.label_folder}/{train_path}/{image_filenames[remove_image_idx].replace(args.before_file_extension, args.after_file_extension)}'
 
-                        # 4] [Split한 이미지명이 다음 이미지와 다른 경우] or [idx-1인데 list가 2개 이상인 경우, 파일 중복 제거할 다음 기회 없으니까 지금 바로 최대값 구한 후 제거] (list가 1개인 경우에서 현재 이미지명과 다음 이미지명이 다르면 중복될 예정이 아니므로 신경쓰지 않아도됨)]
-                        if (now_image_filename[0:now_image_filename.find(filename_split_criterion)] != next_image_filename[0:next_image_filename.find(filename_split_criterion)] or (idx >= len(image_filenames) - 1)) and len(dup_images_idx) >= 2:
-                            # [1] 최대 용량 파일 제외한 모든 파일 지우기
-                            print("dup_images_idx : ", dup_images_idx)
-                            print("max(dup_images_idx, key=dup_images_idx.get) : ", max(dup_images_idx, key=dup_images_idx.get))
-                            dup_images_idx.pop(max(dup_images_idx, key=dup_images_idx.get))
-                            """
-                            print("dup_images_idx : ", dup_images_idx)
-                            """
-                            for dup_image_idx in dup_images_idx.keys():
-                                remove_image_path = f'{args.base_path}/{args.image_folder}/{train_path}/{image_filenames[dup_image_idx]}'
-                                remove_label_path = f'{args.base_path}/{args.label_folder}/{train_path}/{image_filenames[dup_image_idx].replace(args.before_file_extension, args.after_file_extension)}'
+                            print(f"remove_image_path : {remove_image_path}")
+                            print(f"remove_label_path : {remove_label_path}")
 
-                                print(f"remove_image_path : {remove_image_path}")
-                                print(f"remove_label_path : {remove_label_path}")
+                            os.unlink(remove_image_path)
+                            os.unlink(remove_label_path)
 
-                                os.unlink(remove_image_path)
-                                os.unlink(remove_label_path)
+                        # list 비우기
+                        target_images = dict()
+                # --------------------------------------------------------------
+                # 3] 마지막 순회인 경우 : 파일 용량 최대값인 파일 빼고, 중복되는 파일 삭제
+                # --------------------------------------------------------------
+                if i == len(splited_image_filenames)-1:
+                    # [1] buffer 2개 이상 존재하는 경우 : 파일 용량 최대값인 파일 빼고, 중복되는 파일 삭제
+                    if len(target_images) >= 2:
+                        target_images.pop(max(target_images, key=target_images.get))
+                        for remove_image_idx in target_images.keys():
+                            remove_image_path = f'{args.base_path}/{args.image_folder}/{train_path}/{image_filenames[remove_image_idx]}'
+                            remove_label_path = f'{args.base_path}/{args.label_folder}/{train_path}/{image_filenames[remove_image_idx].replace(args.before_file_extension, args.after_file_extension)}'
 
-                            # [2] list 비우기
-                            dup_images_idx = {}
+                            print(f"remove_image_path : {remove_image_path}")
+                            print(f"remove_label_path : {remove_label_path}")
 
-                        # 5] 모든 경우 : list에 다음 이미지 index + 파일 용량 저장
-                        dup_images_idx[idx + 1] = next_image_filesize
+                            os.unlink(remove_image_path)
+                            os.unlink(remove_label_path)
 
-Remove_Image(args.base_path)
+Remove_Image()
