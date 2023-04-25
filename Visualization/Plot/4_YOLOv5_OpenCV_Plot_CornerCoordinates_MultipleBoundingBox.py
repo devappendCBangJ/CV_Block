@@ -13,12 +13,12 @@ import cv2
 parser = argparse.ArgumentParser(description='Object_Detection_PIL_Plot_BoundingBox')
 
 parser.add_argument('--base-path', default='/media/hi/SK Gold P31/GSC/Human', type=str, help='Plot할 데이터셋이 모여있는 grandmother 폴더 경로 지정')
-parser.add_argument('--source-parent-pathes', default=['images'], type=str, nargs='*', help='Plot할 데이터셋의 이미지가 모여있는 mother 폴더 지정')
-parser.add_argument('--source-child-pathes', default=['train', 'val', 'test'], type=str, nargs='*', help='Plot할 데이터셋의 이미지가 모여있는 child 폴더 지정')
-parser.add_argument('--image-folder', default='images', type=str, help='base_path/source_parent_pathes/source_child_pathes에서 이미지가 모여있는 source_parent_pathes 폴더명')
-parser.add_argument('--label-folder', default='labels', type=str, help='base_path/source_parent_pathes/source_child_pathes에서 라벨이 모여있는 source_parent_pathes 폴더명')
-parser.add_argument('--before-file-extension', default='.jpg', type=str, help='base_path/image_folder/source_child_pathes 안에 들어있는 이미지 파일 확장자')
-parser.add_argument('--after-file-extension', default='.txt', type=str, help='base_path/label_folder/source_child_pathes 에서 오픈할 텍스트 파일 확장자')
+parser.add_argument('--source-parent-folders', default=['images'], type=str, nargs='*', help='Plot할 데이터셋의 이미지가 모여있는 mother 폴더 지정')
+parser.add_argument('--source-child-folders', default=['train', 'val', 'test'], type=str, nargs='*', help='Plot할 데이터셋의 이미지가 모여있는 child 폴더 지정')
+parser.add_argument('--image-folder', default='images', type=str, help='base_path/source_parent_folders/source_child_folders에서 이미지가 모여있는 source_parent_folders 폴더명')
+parser.add_argument('--label-folder', default='labels', type=str, help='base_path/source_parent_folders/source_child_folders에서 라벨이 모여있는 source_parent_folders 폴더명')
+parser.add_argument('--before-file-extension', default='.jpg', type=str, help='base_path/image_folder/source_child_folders 안에 들어있는 이미지 파일 확장자')
+parser.add_argument('--after-file-extension', default='.txt', type=str, help='base_path/label_folder/source_child_folders 에서 오픈할 텍스트 파일 확장자')
 
 args = parser.parse_args()
 
@@ -32,18 +32,18 @@ def get_filenames(folder_path):
     filenames = os.listdir(folder_path)
     return filenames
 
-def show_bbox(base_path):
+def show_bbox():
     # --------------------------------------------------------------
     # 1) Image Path + Label Path 정의
     # --------------------------------------------------------------
-    for image_path in args.source_parent_pathes:
-        for train_path in args.source_child_pathes:
-            image_filenames = get_filenames(f'{args.base_path}/{image_path}/{train_path}')
+    for image_folder in args.source_parent_folders:
+        for train_folder in args.source_child_folders:
+            image_filenames = get_filenames(f'{args.base_path}/{image_folder}/{train_folder}')
             for image_filename in image_filenames:
                 label_filename = image_filename.replace(args.before_file_extension, args.after_file_extension)
 
-                image_path = f'{args.base_path}/{args.image_folder}/{train_path}/{image_filename}'
-                label_path = f'{args.base_path}/{args.label_folder}/{train_path}/{label_filename}'
+                image_path = f'{args.base_path}/{args.image_folder}/{train_folder}/{image_filename}'
+                label_path = f'{args.base_path}/{args.label_folder}/{train_folder}/{label_filename}'
 
                 # --------------------------------------------------------------
                 # 2) Image 불러오기 + Bounding Box 그리기 준비
@@ -82,4 +82,4 @@ def show_bbox(base_path):
                 cv2.waitKey(0)
                 cv2.destroyAllWindows()
 
-show_bbox(args.base_path)
+show_bbox()
