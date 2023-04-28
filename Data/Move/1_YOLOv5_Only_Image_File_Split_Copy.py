@@ -10,7 +10,6 @@ import shutil
 import argparse
 
 import numpy as np
-from PIL import Image
 
 # ==============================================================
 # 0. 변수 정의

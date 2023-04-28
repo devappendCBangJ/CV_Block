@@ -43,15 +43,12 @@ def draw_bbox():
                 os.makedirs(f'{base_DrawBbox_path}/labels/{train_folder}')
 
     # --------------------------------------------------------------
-    # 0) 변수 선언
-    # --------------------------------------------------------------
-    errors_info = ['| filename | cls | x | y | img_w | img_h |']
-
-    # --------------------------------------------------------------
     # 1) Image Path + Label Path 정의
     # --------------------------------------------------------------
     for image_folder in args.source_parent_folders:
         for train_folder in args.source_child_folders:
+            errors_info = ['| filename | cls | x | y | img_w | img_h |']
+
             image_filenames = get_filenames(f'{args.base_path}/{image_folder}/{train_folder}')
             image_filenames.sort()
             for image_filename in image_filenames:
@@ -122,6 +119,5 @@ def draw_bbox():
             with open(DrawBbox_error_txt_save_path, 'w') as error_txt:
                 for error_info in errors_info:
                     error_txt.write('%s\n' % error_info)
-            errors_info = ['| filename | cls | x | y | img_w | img_h |']
 
 draw_bbox()
