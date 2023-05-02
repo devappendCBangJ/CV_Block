@@ -55,7 +55,6 @@ def show_save_bboxes():
     # --------------------------------------------------------------
     for image_folder in args.source_parent_folders:
         for train_folder in args.source_child_folders:
-            args.subplot_count = 0
             image_filenames = get_filenames(f'{args.base_path}/{image_folder}/{train_folder}')
             for i, image_filename in enumerate(image_filenames):
                 label_filename = image_filename.replace(args.before_file_extension, args.after_file_extension)
@@ -113,24 +112,23 @@ def show_save_bboxes():
                 # --------------------------------------------------------------
                 # 4) Image Bundle 저장
                 # --------------------------------------------------------------
-                # [1] Plt Subplot Split
-                plot_idx = args.subplot_count % (args.subplot_rows * args.subplot_columns)
-                plt.subplot(args.subplot_rows, args.subplot_columns, plot_idx + 1)
-
-                # [2] Plt Title
+                # (1) Plt Title
                 plt.title(image_filename, fontsize=5)
 
-                # [3] Plt Label
+                # (2) Plt Label
                 # plt.xlabel('x-axis')
                 # plt.ylabel('y-axis')
 
+                # (3) Plt Subplot Split
+                plot_idx = i % (args.subplot_rows * args.subplot_columns)
+                plt.subplot(args.subplot_rows, args.subplot_columns, plot_idx + 1)
                 plt.xticks([])
                 plt.yticks([])
 
-                # [4] Subplot에 Image 저장
+                # (4) Subplot에 Image 저장
                 plt.imshow(image[:, :, ::-1])
 
-                # [5] Plt Figure Axis
+                # (5) Plt Figure Axis
                 plt.axis("off")
 
                 # (6) Image 시각화
@@ -139,13 +137,5 @@ def show_save_bboxes():
                     args.plt_save_count += 1
                     plt_save_path = f'{plt_save_folder_path}/{args.plt_save_count}.png'
                     plt.savefig(plt_save_path, facecolor='#eeeeee', dpi = 100, edgecolor='black')
-
-            # --------------------------------------------------------------
-            # 5) 잔여 Image 시각화
-            # --------------------------------------------------------------
-            if plot_idx != (args.subplot_rows * args.subplot_columns - 1) and args.subplot_count != 0:
-                args.plt_save_count += 1
-                plt_save_path = f'{plt_save_folder_path}/{args.plt_save_count}.png'
-                plt.savefig(plt_save_path, facecolor='#eeeeee', dpi=100, edgecolor='black')
 
 show_save_bboxes()
