@@ -26,7 +26,6 @@ unique_label = []
 # ==============================================================
 def revise_label(labels_path, before_label, after_label):
     # 1) Label 파일명 추출
-    label = None
     for label_path in glob.glob(os.path.join(labels_path, '*.txt')):
         with open(label_path, 'r') as f:
             # 2) label 한줄씩 불러오기
