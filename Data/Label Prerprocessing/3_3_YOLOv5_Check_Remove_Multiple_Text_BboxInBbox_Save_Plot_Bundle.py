@@ -4,7 +4,6 @@
 import os
 import argparse
 import random
-from copy import deepcopy
 
 from itertools import combinations
 
