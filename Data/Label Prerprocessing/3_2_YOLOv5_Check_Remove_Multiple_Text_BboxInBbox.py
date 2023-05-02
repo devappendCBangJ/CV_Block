@@ -85,8 +85,8 @@ def label_bboxinbbox_error_check_revise():
             # --------------------------------------------------------------
             # 3) 에러 정보 쓰기 (error_label_path + error_label_idx)
             # --------------------------------------------------------------
-            error_line_len_txt_save_path = f'{args.base_path}/{args.label_folder}/error_line_len_{train_folder}.txt'
-            with open(error_line_len_txt_save_path, 'w') as error_txt:
+            error_bboxinbbox_txt_save_path = f'{args.base_path}/{args.label_folder}/error_bboxinbbox_{train_folder}.txt'
+            with open(error_bboxinbbox_txt_save_path, 'w') as error_txt:
                 error_txt.write(f'--------------------------------------------------------------\n')
                 # (1) error_file_len
                 error_txt.write(f'error_file_len : {len(errors_info)-1}\n')

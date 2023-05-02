@@ -56,7 +56,7 @@ def label_len_error_check_revise():
                             errors_unique_line_len.add(line_len)
                 # (2) 비정상 데이터 수정
                 if label_filename in errors_info:
-                    print(f'label_filename {label_filename}')
+                    print(f'error_label_filename : {label_filename}')
                     with open(label_path, 'w') as f:
                         # print(f'lines : {lines}')
                         for line in lines:

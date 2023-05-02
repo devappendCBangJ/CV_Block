@@ -126,9 +126,9 @@ def label_bboxinbbox_error_check_revise():
                     image_path = f'{args.base_path}/{args.image_folder}/{train_folder}/{image_filename}'
 
                     image = cv2.imread(image_path)
+                    H, W, C = image.shape
 
                     # 3] Label 한줄씩 불러오기 + 수정 이전 & 이후 Image Bundle Bbox 그리기
-                    H, W, C = image.shape
                     for iter_lines in [lines, after_lines]:
                         image_copy = image.copy()
                         for line in iter_lines:
@@ -203,8 +203,8 @@ def label_bboxinbbox_error_check_revise():
             # --------------------------------------------------------------
             # 3) 에러 정보 쓰기 (error_label_path + error_label_idx)
             # --------------------------------------------------------------
-            error_line_len_txt_save_path = f'{args.base_path}/{args.label_folder}/error_line_len_{train_folder}.txt'
-            with open(error_line_len_txt_save_path, 'w') as error_txt:
+            error_bboxinbbox_txt_save_path = f'{args.base_path}/{args.label_folder}/error_bboxinbbox_{train_folder}.txt'
+            with open(error_bboxinbbox_txt_save_path, 'w') as error_txt:
                 error_txt.write(f'--------------------------------------------------------------\n')
                 # (1) error_file_len
                 error_txt.write(f'error_file_len : {len(errors_info)-1}\n')

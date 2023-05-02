@@ -48,6 +48,7 @@ def label_len_error_check():
                     for line in f.readlines():
                         line_len = len(line.split())
                         if args.normal_line_len != line_len:
+                            print(f'error_label_filename : {label_filename}')
                             errors_info[label_filename] = set()
                             errors_info[label_filename].add(line_len)
                             errors_unique_line_len.add(line_len)

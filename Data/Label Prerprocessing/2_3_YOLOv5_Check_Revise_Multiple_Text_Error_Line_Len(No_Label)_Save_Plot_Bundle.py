@@ -95,7 +95,7 @@ def label_len_error_check_revise():
                     # --------------------------------------------------------------
                     # 1] 비정상 데이터 수정 & 저장
                     # --------------------------------------------------------------
-                    print(f'label_filename {label_filename}')
+                    print(f'error_label_filename : {label_filename}')
                     with open(label_path, 'w') as f:
                         # print(f'lines : {lines}')
                         for line in lines:
