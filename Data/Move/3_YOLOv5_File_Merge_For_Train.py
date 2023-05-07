@@ -11,7 +11,7 @@ import argparse
 # ==============================================================
 # 0. 변수 정의
 # ==============================================================
-parser = argparse.ArgumentParser(description='YOLOv5_File_Merge_For_Train')
+parser = argparse.ArgumentParser(description='3_YOLOv5_File_Merge_For_Train')
 
 parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone', type=str, help='옮길 데이터셋 폴더들이 존재하는 부모 폴더 경로 지정')
 parser.add_argument('--merge-path', default='/Merge_All', type=str, help='Merge 데이터셋을 저장할 폴더 경로 지정')

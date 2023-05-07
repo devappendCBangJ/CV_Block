@@ -5,7 +5,6 @@
 # 1) 기본 라이브러리 불러오기
 # --------------------------------------------------------------
 import os
-import glob
 import shutil
 import argparse
 
@@ -14,14 +13,20 @@ import numpy as np
 # ==============================================================
 # 0. 변수 정의
 # ==============================================================
-parser = argparse.ArgumentParser(description='Only Image File Split Copy')
+parser = argparse.ArgumentParser(description='1_2_YOLOv5_Image_Label_TrainValTest_Split')
 
-parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/BG-20k/train', type=str, help='Data Split할 폴더 경로 지정')
+parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/GolfBall/Golfball_Near_Remove_Similar', type=str, help='Data Split할 데이터들이 모여있는 base 경로 지정')
+parser.add_argument('--base-image-path', default='images/train', type=str, help='Data Split할 base 경로 아래의 image 경로 지정')
+parser.add_argument('--base-label-path', default='labels/train', type=str, help='Data Split할 base 경로 아래의 label 경로 지정')
 parser.add_argument('--split-path', default='_Split', type=str, help='Split 데이터셋을 저장할 폴더 경로 지정')
 parser.add_argument('--source-parent-pathes', default=['images', 'labels'], type=str, nargs='*', help='source 폴더 기준 부모 폴더들 경로')
 parser.add_argument('--source-child-pathes', default=['train', 'val', 'test'], type=str, nargs='*', help='source 폴더 기준 자식 폴더들 경로')
-parser.add_argument('--train-size', default=2300, type=int, help='train data 개수')
-parser.add_argument('--val-size', default=400, type=int, help='val data 개수')
+
+parser.add_argument('--before-file-extension', default='.jpg', type=str, help='base_path/label_folder/source_child_folders 안에 들어있는 텍스트 파일 확장자')
+parser.add_argument('--after-file-extension', default='.txt', type=str, help='base_path/after_folder/source_child_folders 에서 오픈할 이미지 파일 확장자')
+
+parser.add_argument('--train-ratio', default=0.8, type=int, help='train data 비율')
+parser.add_argument('--val-ratio', default=0.2, type=int, help='val data 비율')
 
 args = parser.parse_args()
 
@@ -41,13 +46,10 @@ if not os.path.exists(base_split_path):
 # 1) 각 클래스별 파일명 추출
 # --------------------------------------------------------------
 def get_filenames(folder_path):
-    filenames = set()
-    for file_path in glob.glob(os.path.join(folder_path, '*.jpg')):
-        filename = os.path.split(file_path)[-1]
-        filenames.add(filename)
+    filenames = os.listdir(folder_path)
     return filenames
 
-image_filenames = get_filenames(f'{args.base_path}')
+image_filenames = get_filenames(f'{args.base_path}/{args.base_image_path}')
 
 # ==============================================================
 # 3. Data Split
@@ -55,7 +57,7 @@ image_filenames = get_filenames(f'{args.base_path}')
 # --------------------------------------------------------------
 # 1) list to numpy
 # --------------------------------------------------------------
-image_filenames = np.array(list(image_filenames))
+image_filenames = np.array(image_filenames)
 
 # --------------------------------------------------------------
 # 2) Data Shuffle
@@ -66,23 +68,35 @@ np.random.shuffle(image_filenames)
 # --------------------------------------------------------------
 # 3) Data Split
 # --------------------------------------------------------------
-# (2) Data Split 함수 정의
-def split_dataset(image_filenames, train_size, val_size):
+# (1) Data Split 함수 정의
+def split_dataset(image_filenames, train_ratio, val_ratio):
+    print(f"len(image_filenames) : {len(image_filenames)}")
     for idx, image_filename in enumerate(image_filenames):
-        # 1] Data Split 기준
-        if idx < train_size:
-            split = 'train'
-        elif idx < train_size + val_size:
-            split = 'val'
+        # 1] Label 파일명 추출
+        label_filename = image_filename.replace(args.before_file_extension, args.after_file_extension)
+
+        # 2] Image 비율
+        image_ratio = idx / len(image_filenames)
+
+        # 3] Data Split 기준
+        if image_ratio <= train_ratio:
+            split_folder = 'train'
+        elif image_ratio <= train_ratio + val_ratio:
+            split_folder = 'val'
         else:
-            split = 'test'
+            split_folder = 'test'
 
-        # 2] Image Source / Target 파일 경로 추출
-        source_image_path = f'{args.base_path}/{image_filename}'
-        target_image_path = f'{base_split_path}/images/{split}'
+        # 4] Source / Target 파일 경로 추출
+        source_image_path = f'{args.base_path}/{args.base_image_path}/{image_filename}'
+        target_image_path = f'{base_split_path}/images/{split_folder}/{image_filename}'
 
-        # 3] Image 파일 복사
+        source_label_path = f'{args.base_path}/{args.base_label_path}/{label_filename}'
+        target_label_path = f'{base_split_path}/labels/{split_folder}/{label_filename}'
+
+        # 5] Image 파일 복사
         shutil.copy(source_image_path, target_image_path)
+        shutil.copy(source_label_path, target_label_path)
 
-# (1) Data Split
-split_dataset(image_filenames, train_size=args.train_size, val_size=args.val_size)
+        print(f'target_image_path : ', target_image_path)
+
+split_dataset(image_filenames, train_ratio=args.train_ratio, val_ratio=args.val_ratio)

@@ -11,7 +11,7 @@ import cv2
 # ==============================================================
 parser = argparse.ArgumentParser(description='4_YOLOv5_PIL_Plot_CenterCoordinates_Only_One_BoundingBox')
 
-parser.add_argument('--image-path', default='/media/hi/SK Gold P31/Capstone/GolfBall/Golfball_Near_Remove_Similar_FixLabel_Plot/images/train/B25_jpg.rf.3b4713b028e107d15625b0cd48faa4c2.jpg', type=str, help='Plot할 이미지 1개 경로')
+parser.add_argument('--image-path', default='/media/hi/SK Gold P31/Capstone/GolfBall/Golfball_Near_Remove_Similar_FixLabel_Remove_BboxInBbox_Check_ErrorBboxRatio/images/train/0-9593-276_jpg.rf.cd034c928f33279d7d2153700458b553.jpg', type=str, help='Plot할 이미지 1개 경로')
 
 args = parser.parse_args()
 
