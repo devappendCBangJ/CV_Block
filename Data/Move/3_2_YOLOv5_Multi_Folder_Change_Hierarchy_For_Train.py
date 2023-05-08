@@ -12,7 +12,7 @@ import argparse
 # ==============================================================
 # 0. 변수 정의
 # ==============================================================
-parser = argparse.ArgumentParser(description='2_2_YOLOv5_Multi_Folder_Hierarchy_For_Train')
+parser = argparse.ArgumentParser(description='3_2_YOLOv5_Multi_Folder_Hierarchy_For_Train')
 
 parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/Golfball_Near', type=str, help='옮길 데이터셋 폴더들이 존재하는 부모 폴더 경로 지정')
 parser.add_argument('--move-path', default='_Move', type=str, help='데이터셋을 옮길 폴더 경로 지정')
