@@ -10,7 +10,7 @@ import cv2
 # ==============================================================
 # 0. 변수 정의
 # ==============================================================
-parser = argparse.ArgumentParser(description='0_YOLOv5_OpenCV_Save_CenterCoordinates_MultipleBoundingBox_Print_Error')
+parser = argparse.ArgumentParser(description='2_YOLOv5_OpenCV_Save_Plot_CenterCoordinates_MultipleBoundingBox_Print_Error')
 
 parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/GolfBall/Golfball_Near_Remove_Similar_Test', type=str, help='Plot할 데이터셋이 모여있는 grandmother 폴더 경로 지정')
 parser.add_argument('--source-parent-folders', default=['images'], type=str, nargs='*', help='Plot할 데이터셋의 이미지가 모여있는 mother 폴더 지정')

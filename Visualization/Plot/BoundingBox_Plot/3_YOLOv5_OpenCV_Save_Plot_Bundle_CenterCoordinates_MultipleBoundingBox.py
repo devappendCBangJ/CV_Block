@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 # ==============================================================
 # 0. 변수 정의
 # ==============================================================
-parser = argparse.ArgumentParser(description='1_YOLOv5_OpenCV_Plot_CenterCoordinates_MultipleBoundingBox')
+parser = argparse.ArgumentParser(description='3_YOLOv5_OpenCV_Save_Plot_Bundle_CenterCoordinates_MultipleBoundingBox')
 
 parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/GolfBall/Golfball_Near_Remove_Similar_FixLabel', type=str, help='Plot할 데이터셋이 모여있는 grandmother 폴더 경로 지정')
 parser.add_argument('--source-parent-folders', default=['images'], type=str, nargs='*', help='Plot할 데이터셋의 이미지가 모여있는 mother 폴더 지정')
