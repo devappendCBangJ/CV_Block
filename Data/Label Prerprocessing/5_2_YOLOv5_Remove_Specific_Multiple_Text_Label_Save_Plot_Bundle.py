@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 # ==============================================================
 # 0. 변수 정의
 # ==============================================================
-parser = argparse.ArgumentParser(description='4_3_YOLOv5_Remove_Multiple_Text_Label')
+parser = argparse.ArgumentParser(description='5_2_YOLOv5_Remove_Specific_Multiple_Text_Label_Save_Plot_Bundle')
 
 parser.add_argument('--error-txt-filename', default='/media/hi/SK Gold P31/Capstone/GolfBall/Golfball_Near_Remove_Similar_FixLabel_Remove_BboxInBbox_Remove_ErrorBboxRatio/labels/error_bbox_ratio_handmade.txt', type=str, help='에러 파일명들을 모아둔 텍스트 파일 (단, 파일 확장자명을 제외한 파일명만 써져 있어야함)')
 

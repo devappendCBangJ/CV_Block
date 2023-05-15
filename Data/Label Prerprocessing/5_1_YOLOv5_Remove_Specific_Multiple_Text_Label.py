@@ -7,7 +7,7 @@ import argparse
 # ==============================================================
 # 0. 변수 정의
 # ==============================================================
-parser = argparse.ArgumentParser(description='4_3_YOLOv5_Remove_Multiple_Text_Label')
+parser = argparse.ArgumentParser(description='5_1_YOLOv5_Remove_Specific_Multiple_Text_Label')
 
 parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/GolfBall/Golfball_Near_Remove_Similar_FixLabel_Remove_BboxInBbox_Remove_ErrorBboxRatio_Test', type=str, help='변경할 라벨들이 모여있는 grandmother 폴더 지정')
 parser.add_argument('--source-parent-folders', default=['labels'], type=str, nargs='*', help='변경할 라벨들이 모여있는 mother 폴더 지정')
