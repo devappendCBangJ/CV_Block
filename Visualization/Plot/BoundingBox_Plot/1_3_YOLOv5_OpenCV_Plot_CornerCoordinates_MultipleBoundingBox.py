@@ -1,29 +1,26 @@
 # ==============================================================
 # 0. 라이브러리 불러오기
 # ==============================================================
+from PIL import Image, ImageDraw
 import os
 import argparse
-import random
 
 import cv2
 
 # ==============================================================
 # 0. 변수 정의
 # ==============================================================
-parser = argparse.ArgumentParser(description='1_YOLOv5_OpenCV_Plot_CenterCoordinates_MultipleBoundingBox')
+parser = argparse.ArgumentParser(description='1_3_YOLOv5_OpenCV_Plot_CornerCoordinates_MultipleBoundingBox')
 
-parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/GolfBall/Golfball_Near', type=str, help='Plot할 데이터셋이 모여있는 grandmother 폴더 경로 지정')
+parser.add_argument('--base-path', default='/media/hi/SK Gold P31/GSC/Human', type=str, help='Plot할 데이터셋이 모여있는 grandmother 폴더 경로 지정')
 parser.add_argument('--source-parent-folders', default=['images'], type=str, nargs='*', help='Plot할 데이터셋의 이미지가 모여있는 mother 폴더 지정')
 parser.add_argument('--source-child-folders', default=['train', 'val', 'test'], type=str, nargs='*', help='Plot할 데이터셋의 이미지가 모여있는 child 폴더 지정')
-
-parser.add_argument('--image-folder', default='images', type=str, help='base_path/source_parent_folders/source_child_folders에서 이미지가 모여있는 source_parent_pathes 폴더명')
-parser.add_argument('--label-folder', default='labels', type=str, help='base_path/source_parent_folders/source_child_folders에서 라벨이 모여있는 source_parent_pathes 폴더명')
+parser.add_argument('--image-folder', default='images', type=str, help='base_path/source_parent_folders/source_child_folders에서 이미지가 모여있는 source_parent_folders 폴더명')
+parser.add_argument('--label-folder', default='labels', type=str, help='base_path/source_parent_folders/source_child_folders에서 라벨이 모여있는 source_parent_folders 폴더명')
 parser.add_argument('--before-file-extension', default='.jpg', type=str, help='base_path/image_folder/source_child_folders 안에 들어있는 이미지 파일 확장자')
 parser.add_argument('--after-file-extension', default='.txt', type=str, help='base_path/label_folder/source_child_folders 에서 오픈할 텍스트 파일 확장자')
 
 args = parser.parse_args()
-
-unique_label = {}
 
 # ==============================================================
 # 1. Bounding Box 그리기
@@ -62,13 +59,6 @@ def show_bbox():
                         # 1] Label Split
                         label, x, y, w, h = line.split(' ')
 
-                        # 2] unique label : 서로 다른 색상 사용
-                        if label not in unique_label:
-                            temp_color = (random.randrange(0, 255, 50), random.randrange(0, 255, 50), random.randrange(0, 255, 50))
-                            while temp_color in unique_label.values():
-                                temp_color = (random.randrange(0, 255, 50), random.randrange(0, 255, 50), random.randrange(0, 255, 50))
-                            unique_label[label] = temp_color
-
                         # 2] Label 자료형 변환
                         x = float(x)
                         y = float(y)
@@ -77,19 +67,16 @@ def show_bbox():
 
                         # 3] Bounding Box 좌표 계산
                         H, W, C = image.shape
-                        x1 = (x - w / 2) * W
-                        y1 = (y - h / 2) * H
-                        x2 = (x + w / 2) * W
-                        y2 = (y + h / 2) * H
+                        x1 = (x) * W
+                        y1 = (y) * H
+                        x2 = (x + w) * W
+                        y2 = (y + h) * H
 
                         # 4] Bounding Box 그리기
-                        image = cv2.rectangle(image, (int(x1), int(y1)), (int(x2), int(y2)), color=unique_label[label], thickness=3)
-
-                        # 5] 텍스트 그리기
-                        image = cv2.putText(image, label, org = (int(x1), int(y1)), fontFace = cv2.FONT_HERSHEY_PLAIN, fontScale = 2, color = unique_label[label])
+                        image = cv2.rectangle(image, (int(x1), int(y1)), (int(x2), int(y2)), (255, 0, 0), 3)
 
                 # --------------------------------------------------------------
-                # 4) Image 시각화
+                # 3) Image 시각화
                 # --------------------------------------------------------------
                 cv2.imshow(f'{image_filename}', image)
                 cv2.waitKey(0)
