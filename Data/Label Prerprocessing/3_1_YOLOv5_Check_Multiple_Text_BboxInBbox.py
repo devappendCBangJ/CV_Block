@@ -41,7 +41,7 @@ def label_bboxinbbox_error_check():
             # --------------------------------------------------------------
             for label_filename in label_filenames:
                 # (1) 경로 추출
-                label_path = f'{args.base_path}/{args.label_folder}/{train_folder}/{label_filename}'
+                label_path = f'{args.base_path}/{label_folder}/{train_folder}/{label_filename}'
 
                 # (2) Bbox 내에 Bbox 있는 라벨 idx 추출
                 with open(label_path, 'r') as f:
@@ -81,7 +81,7 @@ def label_bboxinbbox_error_check():
             # --------------------------------------------------------------
             # 3) 에러 정보 쓰기 (error_label_path + error_line_num)
             # --------------------------------------------------------------
-            error_bboxinbbox_txt_save_path = f'{args.base_path}/{args.label_folder}/error_bboxinbbox_{train_folder}.txt'
+            error_bboxinbbox_txt_save_path = f'{args.base_path}/{label_folder}/error_bboxinbbox_{train_folder}.txt'
             with open(error_bboxinbbox_txt_save_path, 'w') as error_txt:
                 error_txt.write(f'--------------------------------------------------------------\n')
                 # (1) error_file_len
