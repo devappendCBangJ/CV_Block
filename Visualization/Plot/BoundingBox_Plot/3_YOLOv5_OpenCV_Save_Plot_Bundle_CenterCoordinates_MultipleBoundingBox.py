@@ -140,6 +140,8 @@ def show_save_bboxes():
                     plt_save_path = f'{plt_save_folder_path}/{args.plt_save_count}.png'
                     plt.savefig(plt_save_path, facecolor='#eeeeee', dpi = 100, edgecolor='black')
 
+                args.subplot_count += 1
+
             # --------------------------------------------------------------
             # 5) 잔여 Image 시각화
             # --------------------------------------------------------------
