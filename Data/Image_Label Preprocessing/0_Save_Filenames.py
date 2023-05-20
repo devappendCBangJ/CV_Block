@@ -5,14 +5,13 @@
 # 1) 기본 라이브러리 불러오기
 # --------------------------------------------------------------
 import os
-import shutil
 import argparse
 
 # ==============================================================
 # 0. 변수 정의
 # ==============================================================
 # Image와 동일한 파일명을 가진 텍스트 파일을 찾은 후, 현재 Image 파일 경로와 대응되는 폴더 위치로 옮기는 코드
-parser = argparse.ArgumentParser(description='1_Save_Filenames')
+parser = argparse.ArgumentParser(description='0_Save_Filenames')
 
 parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/GolfBall/Golfball_Near_Remove_Similar_Test', type=str, help='라벨과 이미지 데이터셋이 모여있는 grandmother 폴더 경로 지정')
 parser.add_argument('--source-parent-pathes', default=['images'], type=str, nargs='*', help='source 폴더 기준 부모 폴더들 경로')

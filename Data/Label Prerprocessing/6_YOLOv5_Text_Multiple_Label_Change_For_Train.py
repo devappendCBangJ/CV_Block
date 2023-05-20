@@ -62,7 +62,7 @@ def revise_label(labels_path, before_label, after_label):
                     else:
                         f.write(f'{label} {bbox}')
 
-    print(f'unique_label : {unique_label}')
+    print(f'before unique_label : {unique_label}')
 
 # ==============================================================
 # 2. Main문

@@ -12,7 +12,7 @@ import argparse
 # 0. 변수 정의
 # ==============================================================
 # Image와 동일한 파일명을 가진 텍스트 파일을 찾은 후, 현재 Image 파일 경로와 대응되는 폴더 위치로 옮기는 코드
-parser = argparse.ArgumentParser(description='1_Move_Labels_Images_In_Folder_Filename')
+parser = argparse.ArgumentParser(description='1_YOLOv5_Move_Labels_Images_In_Folder_Filename')
 
 parser.add_argument('--extract-folder', default='/media/hi/SK Gold P31/Capstone/GolfBall/Val_Images', type=str, help='원하는 파일명들이 모여있는 폴더 지정')
 parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/GolfBall/Golfball_Near_Remove_Similar_FixLabel_Remove_BboxInBbox_Remove_ErrorBboxRatio', type=str, help='라벨과 이미지 데이터셋이 모여있는 grandmother 폴더 경로 지정')
