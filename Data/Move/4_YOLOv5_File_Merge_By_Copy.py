@@ -24,11 +24,11 @@ args = parser.parse_args()
 # ==============================================================
 # 1. 파일 이동을 위한 폴더 생성
 # ==============================================================
-base_all_path = args.base_path + args.merge_path
-if not os.path.exists(base_all_path):
+base_merge_path = args.base_path + args.merge_path
+if not os.path.exists(base_merge_path):
     for folder in args.source_parent_pathes:
         for split in args.source_child_pathes:
-            os.makedirs(f'{base_all_path}/{folder}/{split}')
+            os.makedirs(f'{base_merge_path}/{folder}/{split}')
 
 # ==============================================================
 # 2. 폴더 내 파일 합치기
@@ -52,10 +52,10 @@ for class_path in args.class_pathes:
                 # 1] source 폴더 내 파일명 추출
                 source_filenames = get_filenames(folder_abs_path)
                 # 2] target 폴더로 파일 복사
-                target_folder_path = f'{base_all_path}/{image_path}/{train_path}'
+                target_merge_path = f'{base_merge_path}/{image_path}/{train_path}'
                 for source_filename in source_filenames:
                     source_file_path = f'{args.base_path}/{class_path}/{image_path}/{train_path}/{source_filename}'
                     # 3] 복사한 파일 경로 시각화
                     print(f'source_file_path : {source_file_path}')
-                    print(f'target_folder_path : {target_folder_path}')
-                    shutil.copy(source_file_path, target_folder_path)
+                    print(f'target_folder_path : {target_merge_path}')
+                    shutil.copy(source_file_path, target_merge_path)
