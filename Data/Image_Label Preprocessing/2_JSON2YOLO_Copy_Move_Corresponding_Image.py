@@ -122,23 +122,23 @@ def main():
                             # 1]] x, y의 좌표가 이미지 최소 좌표보다 작은 경우, 0으로 바꿔줌
                             # 2]] x, y 좌표가 실제 w, h 좌표보다 큰 경우, 제거
                             # 3]] w, h좌표가 이미지 실제 w, h보다 큰 경우 이미지 최대 픽셀로 바꿔줌
-                        x, y, w, h = json_data["annotations"][j]["bbox"]
+                        X, Y, W, H = json_data["annotations"][j]["bbox"]
 
-                        x = max(int(x), 0)
-                        y = max(int(y), 0)
+                        X = max(int(X), 0)
+                        Y = max(int(Y), 0)
 
-                        if x >= img_w or y >= img_h:
-                            print(f'errors_info : {txt_abs_path} {cls} {x} {y} {img_w} {img_h}')
-                            errors_info.append(f'{txt_abs_path} {cls} {x} {y} {img_w} {img_h}')
+                        if X >= img_w or Y >= img_h:
+                            print(f'errors_info : {txt_abs_path} {cls} {X} {Y} {img_w} {img_h}')
+                            errors_info.append(f'{txt_abs_path} {cls} {X} {Y} {img_w} {img_h}')
 
-                        w = min(int(w), img_w - x)
-                        h = min(int(h), img_h - y)
+                        W = min(int(W), img_w - X)
+                        H = min(int(H), img_h - Y)
 
                         # [3] cx, cy, nw, nh 변환 : 정수 좌표 -> 비율 좌표 변환
-                        cx = (x + w / 2.) / img_w
-                        cy = (y + h / 2.) / img_h
-                        nw = float(w) / img_w
-                        nh = float(h) / img_h
+                        cx = (X + W / 2.) / img_w
+                        cy = (Y + H / 2.) / img_h
+                        nw = float(W) / img_w
+                        nh = float(H) / img_h
 
                         line = '%d %.6f %.6f %.6f %.6f\n' % (cls, cx, cy, nw, nh)
 
@@ -164,7 +164,7 @@ def main():
             # --------------------------------------------------------------
             images_abs_path = set(images_abs_path)
 
-            set_txt_save_abs_path = f"{args.json_mother_abs_path}/labels/{train_val_dir}.txt"
+            set_txt_save_abs_path = f"{args.json_mother_abs_path}/labels/saved_{train_val_dir}.txt"
             with open(set_txt_save_abs_path, 'w') as set_txt:
                 for image_abs_path in images_abs_path:
                     set_txt.write('%s\n' % image_abs_path)

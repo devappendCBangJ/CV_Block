@@ -84,18 +84,19 @@ for i, image_filename in enumerate(image_filenames):
     # --------------------------------------------------------------
     # 2) Visualization
     # --------------------------------------------------------------
-    # (1) Plt Title
+    # (1) Plt Subplot Split
+    plot_idx = i % (args.subplot_rows * args.subplot_columns)
+    plt.subplot(args.subplot_rows, args.subplot_columns, plot_idx + 1)
+
+    # (2) Plt Title
     plt.title(image_filename, fontsize=7)
 
-    # (2) Plt Label
+    # (3) Plt Label
+    plt.xticks([])
+    plt.yticks([])
     # plt.xlabel('x-axis')
     # plt.ylabel('y-axis')
 
-    # (3) Plt Subplot Split
-    plot_idx = i % (args.subplot_rows * args.subplot_columns)
-    plt.subplot(args.subplot_rows, args.subplot_columns, plot_idx + 1)
-    plt.xticks([])
-    plt.yticks([])
 
     # (4) Subplot에 Image 저장
     plt.imshow(tensor_to_pltimg(transformed_image))

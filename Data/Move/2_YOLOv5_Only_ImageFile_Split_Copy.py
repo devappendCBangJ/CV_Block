@@ -18,7 +18,9 @@ parser = argparse.ArgumentParser(description='2_YOLOv5_Only_ImageFile_Split_Copy
 
 parser.add_argument('--base-path', default='/media/hi/SK Gold P31/GSC/Sentiment_Analysis/Korean_Emotion_Movie/original/val', type=str, help='Data Split할 이미지의 grandmother 경로 지정')
 parser.add_argument('--source-parent-pathes', default=['슬픔', '당황', '기쁨', '불안', '상처'], type=str, nargs='*', help='Data Split할 이미지의 mother 경로들 지정')
-parser.add_argument('--base-split-path', default='/media/hi/SK Gold P31/GSC/Sentiment_Analysis/Korean_Emotion_Movie/original/val/Split', type=str, help='Split 데이터셋을 저장할 폴더 경로 지정')
+parser.add_argument('--base-split-path', default='/media/hi/SK Gold P31/GSC/Sentiment_Analysis/Korean_Emotion_Movie/original/val/Split', type=str, help='Split 데이터셋을 저장할 grandmother 폴더 경로 지정')
+parser.add_argument('--target-parent-pathes', default=['images', 'labels'], type=str, nargs='*', help='Split 데이터셋을 저장할 mother 폴더 경로 지정')
+parser.add_argument('--target-child-pathes', default=['train', 'val', 'test'], type=str, nargs='*', help='Split 데이터셋을 저장할 child 폴더 경로 지정')
 parser.add_argument('--train-size', default=1750, type=int, help='train data 개수')
 parser.add_argument('--val-size', default=250, type=int, help='val data 개수')
 parser.add_argument('--test-size', default=0, type=int, help='test data 개수')
@@ -70,8 +72,8 @@ def get_filenames(folder_path):
 # 1) Data Split을 위한 폴더 생성
 # --------------------------------------------------------------
 if not os.path.exists(args.base_split_path):
-    for folder in args.source_parent_pathes:
-        for split in args.source_child_pathes:
+    for folder in args.target_parent_pathes:
+        for split in args.target_child_pathes:
             os.makedirs(f'{args.base_split_path}/{folder}/{split}')
 
 for source_parent_path in args.source_parent_pathes:
