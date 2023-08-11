@@ -8,7 +8,7 @@ import requests
 # ==============================================================
 # 1. 부모 폴더 경로 지정 + 복사본 생성
 # ==============================================================
-data_path = "/media/hi/SK Gold P31/Korean_Emotion_Movie/val"  # 뒤에 / 붙이면 안됨
+data_path = "/media/hi/SK Gold P31/Capstone/GolfBall/Crawling"  # 뒤에 / 붙이면 안됨
 
 data_path_cp = f"{data_path}_cp"
 if not os.path.exists(data_path_cp):
@@ -49,15 +49,18 @@ for idx_f, f in enumerate(folder_list):
             with Image.open(file_path) as im:
                 if j[:-4] == ".png":
                     im = im.convert("RGB")
-                im.thumbnail((300, 300))  # 원본을 300 by 300 변경
+                im.thumbnail((500, 500))  # 원본을 300 by 300 변경
                 im.save(file_path_cp, quality=100)  # quality는 jpg포맷만 유효
             if idx_j % ((len(file_list_jpg) // 10)+1) == 0: # 시각화
                 print(f"[FILE] {idx_j + 1}/{len(file_list_jpg)}")
         # ==============================================================
-        # 5. 에러 이미지 경로 출력 + 제거
+        # 5. 에러 이미지 경로 출력 + 경로 저장 + 해당 파일 제거
         # ==============================================================
         except:
             print(f"[ERROR] file_path: {file_path}")    # /media/hi/SK Gold P31/Korean_Emotion_Movie/train/당황/1eab9325767c0fdbe195bcd9da5542f92609fcc1ebbb52953be96718dc57d82a_┐⌐_30_┤τ╚▓_╜╟┐▄ └┌┐¼╚»░µ_20201206220820-007-012.jpg
+            set_txt_save_abs_path = f"{data_path_cp}/{f}_error_file_path.txt"
+            with open(set_txt_save_abs_path, 'a+') as set_txt:
+                set_txt.write(f'{file_path}\n')
             os.unlink(file_path)    # os.remove(file_path)
 
 # # ==============================================================
