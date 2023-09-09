@@ -13,9 +13,10 @@ import argparse
 # ==============================================================
 parser = argparse.ArgumentParser(description='6_1_YOLOv5_Text_Multiple_Label_Change_For_Train')
 
-parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/GolfBall/Golfball_Near/labels', type=str, help='변경할 라벨들이 모여있는 폴더 지정')
-parser.add_argument('--before-label', default="all", type=str, help='변경 이전 라벨 지정')
-parser.add_argument('--after-label', default="0", type=str, help='변경 이후 라벨 지정')
+parser.add_argument('--source-parent-path', default='/media/hi/SK Gold P31/Capstone/GolfBall/Golfball_Near/labels', type=str, help='변경할 라벨들이 모여있는 부모 폴더 지정')
+parser.add_argument('--source-child-path', default=['train/', 'val/', 'test/'], type=str, help='변경할 라벨들이 모여있는 자식 폴더 지정')
+parser.add_argument('--before-class', default="all", type=str, help='변경 이전 라벨 지정')
+parser.add_argument('--after-class', default="0", type=str, help='변경 이후 라벨 지정')
 
 args = parser.parse_args()
 
@@ -67,6 +68,6 @@ def revise_label(labels_path, before_cls, after_cls):
 # ==============================================================
 # 2. Main문
 # ==============================================================
-for idx, f_path in enumerate(['train/', 'val/', 'test/']):
-    print(f'f_path : {f_path}')
-    revise_label(f'{args.base_path}/{f_path}', before_label = args.before_label, after_label = args.after_label)
+for sc_path in args.source_child_path:
+    print(f'sc_path : {sc_path}')
+    revise_label(f'{args.source_parent_path}/{sc_path}', before_cls = args.before_class, after_cls = args.after_class)

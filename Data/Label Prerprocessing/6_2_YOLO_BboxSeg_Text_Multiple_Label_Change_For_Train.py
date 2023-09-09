@@ -13,10 +13,10 @@ import argparse
 # ==============================================================
 parser = argparse.ArgumentParser(description='6_2_YOLO_BboxSeg_Text_Multiple_Label_Change_For_Train')
 
-parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/GolfBall/Golfball_Near/labels', type=str, help='변경할 다양한 종류의 라벨 폴더가 모여있는 부모 폴더 지정')
-parser.add_argument('--bbox-seg-path', default=['Bbox', 'Seg'], type=str, help='각각의 종류의 라벨 폴더 내에 있는 Bbox, Seg 폴더명 지정')
-parser.add_argument('--before-label', default="all", type=str, help='변경 이전 라벨 지정')
-parser.add_argument('--after-label', default="0", type=str, help='변경 이후 라벨 지정')
+parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/GolfBall/4_1_LabelBang_AutoLabeling', type=str, help='변경할 다양한 종류의 라벨 폴더가 모여있는 부모 폴더 지정')
+parser.add_argument('--bbox-seg-path', default=['bbox', 'seg'], type=str, help='각각의 종류의 라벨 폴더 내에 있는 Bbox, Seg 폴더명 지정')
+parser.add_argument('--before-class', default="all", type=str, help='변경 이전 라벨 지정')
+parser.add_argument('--after-class', default="0", type=str, help='변경 이후 라벨 지정')
 
 args = parser.parse_args()
 
@@ -76,4 +76,4 @@ base_folder_list = get_filenames(args.base_path)
 for bf_path in base_folder_list:
     for bs_path in args.bbox_seg_path:
         print(f'f_path : {bf_path}/{bs_path}')
-        revise_label(f'{args.base_path}/{bf_path}/{bs_path}', before_label = args.before_label, after_label = args.after_label)
+        revise_label(f'{args.base_path}/{bf_path}/{bs_path}', before_cls = args.before_class, after_cls = args.after_class)

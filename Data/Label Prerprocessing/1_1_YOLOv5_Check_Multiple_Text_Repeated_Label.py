@@ -13,8 +13,6 @@ parser.add_argument('--base-path', default='/media/hi/SK Gold P31/Capstone/GolfB
 parser.add_argument('--source-parent-folders', default=['labels'], type=str, nargs='*', help='변경할 라벨들이 모여있는 mother 폴더 지정')
 parser.add_argument('--source-child-folders', default=['train', 'val', 'test'], type=str, nargs='*', help='변경할 라벨들이 모여있는 child 폴더 지정')
 
-parser.add_argument('--before-label', default="all", type=str, help='변경 이전 라벨 지정')
-
 args = parser.parse_args()
 
 unique_label = []
