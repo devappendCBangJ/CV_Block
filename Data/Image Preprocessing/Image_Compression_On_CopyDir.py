@@ -8,7 +8,7 @@ import requests
 # ==============================================================
 # 1. 부모 폴더 경로 지정 + 복사본 생성
 # ==============================================================
-data_path = "/media/hi/SK Gold P31/Capstone/GolfBall/Crawling"  # 뒤에 / 붙이면 안됨
+data_path = "/media/hi/SK Gold P31/Capstone/Human/CrowdHuman/images/train"  # 뒤에 / 붙이면 안됨
 
 data_path_cp = f"{data_path}_cp"
 if not os.path.exists(data_path_cp):
@@ -49,7 +49,7 @@ for idx_f, f in enumerate(folder_list):
             with Image.open(file_path) as im:
                 if j[:-4] == ".png":
                     im = im.convert("RGB")
-                im.thumbnail((500, 500))  # 원본을 300 by 300 변경
+                im.thumbnail((900, 900))  # 원본을 300 by 300 변경
                 im.save(file_path_cp, quality=100)  # quality는 jpg포맷만 유효
             if idx_j % ((len(file_list_jpg) // 10)+1) == 0: # 시각화
                 print(f"[FILE] {idx_j + 1}/{len(file_list_jpg)}")

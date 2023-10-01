@@ -11,7 +11,7 @@ import cv2
 # ==============================================================
 parser = argparse.ArgumentParser(description='1_1_YOLOv5_OpenCV_Plot_CenterCoordinates_Only_One_BoundingBox')
 
-parser.add_argument('--image-path', default='/media/hi/SK Gold P31/Capstone/GolfBall/Golfball_Near_Remove_Similar_FixLabel_Remove_BboxInBbox_Check_ErrorBboxRatio/images/train/0-9593-276_jpg.rf.cd034c928f33279d7d2153700458b553.jpg', type=str, help='Plot할 이미지 1개 경로')
+parser.add_argument('--image-path', default='/media/hi/SK Gold P31/Capstone/Human/CrowdHuman/images/train/273271,1fb27000e52b982d.jpg', type=str, help='Plot할 이미지 1개 경로')
 
 args = parser.parse_args()
 
@@ -63,7 +63,7 @@ def show_bbox(image_path):
             y2 = (y + h / 2) * H
 
             # 5] Bounding Box 그리기
-            image = cv2.rectangle(image, (int(x1), int(y1)), (int(x2), int(y2)), color=unique_label[label], thickness=3)
+            image = cv2.rectangle(image, (int(x1), int(y1)), (int(x2), int(y2)), color=unique_label[label], thickness=2)
 
             # 6] 텍스트 그리기
             image = cv2.putText(image, label, org=(int(x1), int(y1)), fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=2, color=unique_label[label])

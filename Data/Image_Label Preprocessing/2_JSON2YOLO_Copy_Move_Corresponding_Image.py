@@ -21,7 +21,7 @@ parser.add_argument('--json-filenames', default=['instances_train2017.json', 'in
 parser.add_argument('--val-image-mother-abs-path', default='/media/hi/SK Gold P31/Capstone/COCO/val2017', type=str, help='val 이미지들이 모여있는 폴더 지정 (단, json 파일명에 train, val, test 중 해당하는 단어를 포함하고 있어야함)')
 parser.add_argument('--train-image-mother-abs-path', default='/media/hi/SK Gold P31/Capstone/COCO/train2017', type=str, help='train 이미지들이 모여있는 폴더 지정 (단, json 파일명에 train, val, test 중 해당하는 단어를 포함하고 있어야함)')
 parser.add_argument('--test-image-mother-abs-path', default='/media/hi/SK Gold P31/Capstone/COCO/test2017', type=str, help='test 이미지들이 모여있는 폴더 지정 (단, json 파일명에 train, val, test 중 해당하는 단어를 포함하고 있어야함)')
-parser.add_argument('--target-cls', default=['37'], type=str, help='yolo 파일로 변환시킬 class 선택, 모든 class를 변환하고 싶은 경우 All 이라고 지정하면 됨')
+parser.add_argument('--target-cls', default=['1', '37'], type=str, help='yolo 파일로 변환시킬 class 선택, 모든 class를 변환하고 싶은 경우 All 이라고 지정하면 됨')
 
 args = parser.parse_args()
 
@@ -128,7 +128,7 @@ def main():
                         Y = max(int(Y), 0)
 
                         if X >= img_w or Y >= img_h:
-                            print(f'errors_info : {txt_abs_path} {cls} {X} {Y} {img_w} {img_h}')
+                            print(f'Out of image bbox errors_info : {txt_abs_path} {cls} {X} {Y} {img_w} {img_h}')
                             errors_info.append(f'{txt_abs_path} {cls} {X} {Y} {img_w} {img_h}')
 
                         W = min(int(W), img_w - X)
@@ -174,7 +174,7 @@ def main():
             # --------------------------------------------------------------
             errors_info = set(errors_info)
 
-            error_txt_save_abs_path = f"{args.json_mother_abs_path}/labels/error_{train_val_dir}.txt"
+            error_txt_save_abs_path = f"{args.json_mother_abs_path}/labels/Out of image bbox errors_{train_val_dir}.txt"
             with open(error_txt_save_abs_path, 'w') as error_txt:
                 for error_info in errors_info:
                     error_txt.write('%s\n' % error_info)
